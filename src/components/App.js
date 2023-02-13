@@ -140,9 +140,9 @@ const states = [{
 
 
 function App() {
-	const [{ stateSelected, setStateSelected }] = useState("");
-	const [{ citySelected, setCitySelected }] = useState("");
-	const [{ landmarkSelected, setLandmarkSelected }] = useState("");
+	const [stateSelected, setStateSelected] = useState("");
+	const [citySelected, setCitySelected] = useState("");
+	const [landmarkSelected, setLandmarkSelected] = useState("");
 
 	const stateUpdated = (event) => {
 		setStateSelected(event.target.value);
@@ -152,33 +152,55 @@ function App() {
 		setCitySelected(event.target.value);
 	}
 
+	const landmarkUpdated = (event) => {
+		setLandmarkSelected(event.target.value);
+	}
+
 	// Do not alter/remove main div
 	return (
 		<div id="main">
 			<select id="state" onChange={stateUpdated}>
-				{states.map(state => {
-					return <option key={uniqid()}>{state.name}</option>
+				{states.map((state, i) => {
+					return <option key={uniqid()} value={i}>{state.name}</option>
 				})}
 			</select>
 			<select id="city" onChange={cityUpdated}>
-				{states.map(state => {
-					if (stateSelected == state.name)
-						return state.city.map(city => {
-							return <option key={uniqid()}>{city.name}</option>
-						})
+				{states[stateSelected]?.city.map((city, i) => {
+					return <option key={uniqid()} value={i}>{city.name}</option>
 				})}
 			</select>
-			<select id="landmark">
-				{states.map(state => {
-					return state.city.map(city => {
-						if (stateSelected == state.name)
-							return city.landmarks.map(landmark => {
-								if (citySelected == city.name)
-									return <option key={uniqid()}>{landmark.name}</option>
-							})
-					})
+			<select id="landmark" onChange={landmarkUpdated}>
+				{states[stateSelected]?.city[citySelected]?.landmarks.map((lm, i) => {
+					return <option key={uniqid()} value={i}>{lm.name}</option>
 				})}
 			</select>
+			<div id="state-name">
+				{states[stateSelected]?.name}
+			</div>
+			<div id="state-description">
+				{states[stateSelected]?.description}
+			</div>
+			<div id="state-title">
+				{states[stateSelected]?.title}
+			</div>
+			<div id="city-name">
+				{states[stateSelected]?.city[citySelected]?.name}
+			</div>
+			<div id="city-description">
+				{states[stateSelected]?.city[citySelected]?.description}
+			</div>
+			<div id="city-title">
+				{states[stateSelected]?.city[citySelected]?.title}
+			</div>
+			<div id="landmark-name">
+				{states[stateSelected]?.city[citySelected]?.landmarks[landmarkSelected]?.name}
+			</div>
+			<div id="landmark-description">
+				{states[stateSelected]?.city[citySelected]?.landmarks[landmarkSelected]?.description}
+			</div>
+			<div id="landmark-title">
+				{states[stateSelected]?.city[citySelected]?.landmarks[landmarkSelected]?.title}
+			</div>
 		</div>
 	);
 }
